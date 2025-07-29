@@ -1,0 +1,87 @@
+.cartPage .table thead {
+  background-color: #ececec !important;
+  overflow: hidden;
+}
+.cartPage .table thead th {
+  border: 0px !important;
+}
+.cartPage .table thead th:first-child {
+  border-top-left-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+}
+.cartPage .table thead th:last-child {
+  border-top-right-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+}
+
+a {
+  text-decoration: none !important;
+}
+a:hover {
+  text-decoration: none !important;
+}
+.cartItemImgWrapper {
+  width: 400px;
+}
+.cartItemImgWrapper .imgWrapper {
+  width: 100px;
+  overflow: hidden;
+}
+.cartItemImgWrapper a:hover {
+  text-decoration: none;
+}
+.cartItemImgWrapper .info h6 {
+  color: #343434;
+  font-weight: bold;
+}
+.cartItemImgWrapper .info h6:hover {
+  color: #ed164a;
+}
+
+.cartPage .table {
+  border: 0px !important;
+}
+
+.cartPage .table th,
+.cartPage .table td {
+  vertical-align: middle;
+  border: 0px !important;
+}
+
+.remove {
+  cursor: pointer;
+}
+.remove svg {
+  font-size: 30px;
+}
+.remove:hover svg {
+  color: #ed164a;
+}
+.cartPage .quantityDrop button {
+  zoom: 75% !important;
+}
+.cartPage .cartSummary {
+  border-radius: 7px !important;
+  position: sticky;
+  top: 100px;
+  margin-top: 70px !important;
+}
+.cartPage .cartSummary .card-title {
+  font-size: 20px;
+}
+.cartPage .cartSummary h4 {
+  font-size: 16px;
+  font-weight: 800;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+}
+.cartPage .cartSummary span {
+  font-size: 16px;
+  font-weight: 500;
+}
+.cartPage .cartSummary .text-red {
+  color: #ed164a;
+}
+.cartPage .cartSummary .btn-primary a {
+  color: white !important;
+}

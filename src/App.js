@@ -7,6 +7,8 @@ import Footer from "./Components/Footer/footer";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
+import Cart from "./Pages/Cart/cart.js";
+
 import axios from "axios";
 import { useState, useEffect, createContext } from "react";
 export const MyContext = createContext();
@@ -60,6 +62,7 @@ function App() {
           <Route path="/" exact={true} element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
         <Footer />
       </MyContext.Provider>
