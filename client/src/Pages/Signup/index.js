@@ -2,11 +2,12 @@ import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MyContext } from "../../App";
 import "./signup.css";
+import { SignupService } from "../../services/authService";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -35,12 +36,12 @@ const Signup = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
+    if (!formData.first_name.trim()) {
+      newErrors.first_name = "First name is required";
     }
 
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
+    if (!formData.last_name.trim()) {
+      newErrors.last_name = "Last name is required";
     }
 
     if (!formData.email) {
@@ -76,21 +77,8 @@ const Signup = () => {
     setIsLoading(true);
 
     try {
-      // Simulate API call - replace with actual signup API
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // For demo purposes, create user account
-      const userData = {
-        id: Date.now(),
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        name: `${formData.firstName} ${formData.lastName}`,
-        token: "demo-token-" + Date.now(),
-      };
-
-      context.login(userData);
-      navigate("/");
+      const response = await SignupService(formData);
+      navigate("/login");
     } catch (error) {
       setSignupError("Failed to create account. Please try again.");
     } finally {
@@ -114,20 +102,20 @@ const Signup = () => {
           <div className="row">
             <div className="col-md-6">
               <div className="form-group">
-                <label htmlFor="firstName">First Name</label>
+                <label htmlFor="first_name">First Name</label>
                 <input
                   type="text"
                   id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
+                  name="first_name"
+                  value={formData.first_name}
                   onChange={handleChange}
                   placeholder="Enter your first name"
                   className={`form-control ${
-                    errors.firstName ? "is-invalid" : ""
+                    errors.first_name ? "is-invalid" : ""
                   }`}
                 />
-                {errors.firstName && (
-                  <div className="invalid-feedback">{errors.firstName}</div>
+                {errors.first_name && (
+                  <div className="invalid-feedback">{errors.first_name}</div>
                 )}
               </div>
             </div>
@@ -137,18 +125,17 @@ const Signup = () => {
                 <input
                   type="text"
                   id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
+                  name="last_name"
+                  value={formData.last_name}
                   onChange={handleChange}
                   placeholder="Enter your last name"
                   className={`form-control ${
-                    errors.lastName ? "is-invalid" : ""
+                    errors.last_name ? "is-invalid" : ""
                   }`}
                 />
-                {errors.lastName && (
-                  <div className="invalid-feedback">{errors.lastName}</div>
+                {errors.last_name && (
+                  <div className="invalid-feedback">{errors.last_name}</div>
                 )}
-                S
               </div>
             </div>
           </div>

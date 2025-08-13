@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { MyContext } from "../../App";
 import { Link, useNavigate } from "react-router-dom";
+import { LoginService } from "../../services/authService";
 import "./login.css";
 
 const Login = () => {
@@ -51,19 +52,13 @@ const Login = () => {
 
     setIsLoading(true);
     try {
-      // Simulate API call - replace with actual authentication API
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await LoginService(formData);
 
-      // For demo purposes, accept any email/password combination
-      // In real app, you would validate against your backend
-      const userData = {
-        id: Date.now(),
-        email: formData.email,
-        name: formData.email.split("@")[0], // Use email prefix as name
-        token: "demo-token-" + Date.now(),
-      };
+      console.log("response", response);
 
-      context.login(userData);
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("user", JSON.stringify(response.user));
+      context.login(response.user);
       navigate("/");
     } catch (error) {
       setLoginError("Invalid email or password. Please try again.");
@@ -84,7 +79,7 @@ const Login = () => {
           </div>
         )}
         <form className="login-form" onSubmit={handleSubmit}>
-          <div clasName="form-group">
+          <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
               type="email"

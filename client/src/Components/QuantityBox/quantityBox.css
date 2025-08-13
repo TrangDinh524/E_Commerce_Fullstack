@@ -1,0 +1,22 @@
+.quantityDrop {
+  width: 150px;
+  gap: 10px;
+}
+.quantityDrop button {
+  min-width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+.quantityDrop button svg {
+  color: #000;
+}
+.quantityDrop input {
+  width: 30px;
+  border: 0px;
+  background: transparent;
+  outline: none !important;
+  text-align: center;
+}
