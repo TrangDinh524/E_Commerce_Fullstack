@@ -1,4 +1,5 @@
 package handlers
+
 import (
 	"database/sql"
 	"fmt"
@@ -45,17 +46,15 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	fmt.Println("req", req)
 
 	// Check if user exists
 	var user models.User
-	err := database.DB.QueryRow("SELECT id, password FROM users WHERE email = ?", req.Email).Scan(&user.ID, &user.Password)
+	err := database.DB.QueryRow("SELECT id, first_name, last_name, email, password FROM users WHERE email = ?", req.Email).Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email, &user.Password)	
 	if err == sql.ErrNoRows {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
 		return
 	}
-	fmt.Println("user", user.Password)
-	fmt.Println("req.Password", req.Password)
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
 		return
@@ -68,11 +67,23 @@ func Login(c *gin.Context) {
 	}
 
 	// Generate JWT token
-	// token, err := utils.GenerateToken(user.ID)
-	// if err != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
-	// }
+	token, err := utils.GenerateToken(user.ID, user.Email)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		return
+	}
+	fmt.Println("user", user)
+	// Return only essential user data
+	userResponse := gin.H{
+		"id":        user.ID,
+		"firstName": user.FirstName,
+		"lastName":  user.LastName,
+		"email":     user.Email,
+	}
 
-	user.Password = ""
-	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "user": user})
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Login successful", 
+		"user": userResponse,
+		"token": token,
+	})
 }

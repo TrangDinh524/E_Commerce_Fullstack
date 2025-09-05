@@ -20,9 +20,9 @@ function App() {
 
   useEffect(() => {
     getCountry("https://countriesnow.space/api/v0.1/countries/");
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+    const token = localStorage.getItem("token");
+    if (token) {
+      setUser(JSON.parse(localStorage.getItem("user")));
       setIsLoggedIn(true);
     }
   }, []);
@@ -34,16 +34,18 @@ function App() {
     });
   };
 
-  const login = (userData) => {
+  const login = (userData, token) => {
     setUser(userData);
     setIsLoggedIn(true);
     localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", token);
   };
 
   const logout = () => {
     setUser(null);
     setIsLoggedIn(false);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   const value = {
