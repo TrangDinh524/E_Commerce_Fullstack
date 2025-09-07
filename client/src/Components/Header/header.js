@@ -28,7 +28,7 @@ const Header = () => {
     <>
       <div className="header-container">
         {!isAuthPage && (
-          <div className="top-strip bg-notice">
+          <div className="top-strip">
             <div className="container">
               <p className="mb-0 mt-0 text-center">
                 Due to the <b>COVID 19</b> epidemic, orders may be processed
@@ -56,30 +56,25 @@ const Header = () => {
                     {context.isLoggedIn ? (
                       // Logged in
                       <>
-                        <Button className="circle mr-3" title="My Account">
+                        <Button className="user-icon mr-3" title="My Account">
                           <FiUser />
                         </Button>
-                        <div className="ml-auto cart d-flex align-items-center">
-                          <span className="price">$3.29</span>
+                        <div className="cart d-flex align-items-center">
                           <div className="position-relative ml-2">
-                            <Button className="circle">
+                            <Button className="user-icon">
                               <IoBagOutline />
                             </Button>
                             <span className="count d-flex align-items-center justify-content-center">
                               1
                             </span>
                           </div>
+                          <span className="price">$3.29</span>
                         </div>
                         <Button
                           onClick={handleLogout}
                           variant="outlined"
                           size="small"
-                          style={{
-                            color: "#333",
-                            borderColor: "#333",
-                            fontSize: "12px",
-                            padding: "4px 12px",
-                          }}
+                          className="auth-btn auth-btn-outline"
                         >
                           Logout
                         </Button>
@@ -91,13 +86,7 @@ const Header = () => {
                           <Button
                             variant="outlined"
                             size="small"
-                            className="mr-2"
-                            style={{
-                              color: "#333",
-                              borderColor: "#333",
-                              fontSize: "12px",
-                              padding: "4px 12px",
-                            }}
+                            className="mr-2 auth-btn auth-btn-outline"
                             onClick={() => navigate("/login")}
                           >
                             Login
@@ -105,12 +94,7 @@ const Header = () => {
                           <Button
                             variant="contained"
                             size="small"
-                            style={{
-                              backgroundColor: "#333",
-                              color: "white",
-                              fontSize: "12px",
-                              padding: "4px 12px",
-                            }}
+                            className="auth-btn auth-btn-primary"
                             onClick={() => navigate("/signup")}
                           >
                             Sign Up
