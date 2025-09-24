@@ -1,112 +1,220 @@
 import { Dialog } from "@mui/material";
 import Button from "@mui/material/Button";
-import { useState } from "react";
-import { MdClose } from "react-icons/md";
+import { useState, useEffect } from "react";
+import { IoMdClose, IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 import "./productModal.css";
 import Rating from "@mui/material/Rating";
-import { CiHeart } from "react-icons/ci";
 import QuantityBox from "../QuantityBox/quantityBox";
+import { GetProductByID } from "../../services/productsService";
 
-const ProductModal = ({ setIsModalOpen }) => {
+const ProductModal = ({ setIsModalOpen, product }) => {
   const [selectedImage, setSelectedImage] = useState(0);
-  const productImages = [
-    "https://api.spicezgold.com/download/file_1734526995692_zaaliqa-girls-black-handbag-product-images-rvd5gtvjgi-0-202404151052.jpg",
-    "https://api.spicezgold.com/download/file_1734526995692_zaaliqa-girls-black-handbag-product-images-rvd5gtvjgi-1-202404151052.webp",
-    "https://api.spicezgold.com/download/file_1734526995694_zaaliqa-girls-black-handbag-product-images-rvd5gtvjgi-2-202404151052.jpg",
-    "https://api.spicezgold.com/download/file_1734526995692_zaaliqa-girls-black-handbag-product-images-rvd5gtvjgi-0-202404151052.jpg",
-    "https://api.spicezgold.com/download/file_1734526995692_zaaliqa-girls-black-handbag-product-images-rvd5gtvjgi-1-202404151052.webp",
-    "https://api.spicezgold.com/download/file_1734526995694_zaaliqa-girls-black-handbag-product-images-rvd5gtvjgi-2-202404151052.jpg",
-    "https://api.spicezgold.com/download/file_1734526995692_zaaliqa-girls-black-handbag-product-images-rvd5gtvjgi-0-202404151052.jpg",
-    "https://api.spicezgold.com/download/file_1734526995692_zaaliqa-girls-black-handbag-product-images-rvd5gtvjgi-1-202404151052.webp",
-    "https://api.spicezgold.com/download/file_1734526995694_zaaliqa-girls-black-handbag-product-images-rvd5gtvjgi-2-202404151052.jpg",
-    "https://api.spicezgold.com/download/file_1734526995692_zaaliqa-girls-black-handbag-product-images-rvd5gtvjgi-0-202404151052.jpg",
-    "https://api.spicezgold.com/download/file_1734526995692_zaaliqa-girls-black-handbag-product-images-rvd5gtvjgi-1-202404151052.webp",
-    "https://api.spicezgold.com/download/file_1734526995694_zaaliqa-girls-black-handbag-product-images-rvd5gtvjgi-2-202404151052.jpg",
-  ];
-  const handleIMageClick = (index) => {
-    setSelectedImage(index);
+  const [loading, setLoading] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [productDetails, setProductDetails] = useState(product);
+
+  const altImg = "https://via.placeholder.com/500x500?text=No+Image";
+
+  useEffect(() => {
+    if (product?.id && !productDetails?.product_description) {
+      fetchProductDetails(product.id);
+    } else {
+      setProductDetails(product);
+    }
+  }, [product]);
+
+  const fetchProductDetails = async (id) => {
+    try {
+      setLoading(true);
+      const response = await GetProductByID(id);
+      setProductDetails(response);
+    } catch (error) {
+      console.error("Error fetching product details:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return (
-    <Dialog
-      open={true}
-      className="productModal"
-      onClose={() => setIsModalOpen(false)}
-    >
-      <div className="row">
-        <h4 className="mb-0 font-weight-bold">
-          KSC "KHATUSHYAM COLLECTION" Red Pu For Women Handheld Bag
-        </h4>
-        <Button className="close-button" onClick={() => setIsModalOpen(false)}>
-          <MdClose />
-        </Button>
-      </div>
+  const getImages = () => {
+    if (!productDetails?.image) return [];
 
-      <div className="row">
-        <div className="rating d-flex align-items-center">
-          <div className="d-flex align-items-center mr-4">
-            <span>Seller:</span>
-            <span className="ml-2 mr-4 font-weight-bold">Channel</span>
+    try {
+      if (typeof productDetails.image === "string") {
+        return JSON.parse(productDetails.image);
+      }
+      return productDetails.image;
+    } catch (error) {
+      console.error("Error parsing images:", error);
+      return [];
+    }
+  };
+
+  const formatPrice = (price, currency) => {
+    if (!price) return "N/A";
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: currency === "IDR" ? "IDR" : currency === "VND" ? "VND" : "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
+  const calculateDiscount = () => {
+    if (!productDetails?.initialPrice || !productDetails?.finalPrice) return 0;
+    return Math.round(
+      (100 * (productDetails.initial_price - productDetails.final_price)) /
+        productDetails.initial_price
+    );
+  };
+
+  const images = getImages();
+
+  if (loading) {
+    return (
+      <div className="productModal">
+        <div className="modalContent">
+          <div className="text-center py-5">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <p className="mt-3">Loading product details...</p>
           </div>
-          <Rating value={5} precision={0.5} size="small" readOnly />
         </div>
       </div>
+    );
+  }
+  return (
+    <div className="productModal">
+      <div className="modalContent">
+        <div className="modalHeader">
+          <button
+            className="close-button"
+            onClick={() => setIsModalOpen(false)}
+          >
+            <IoMdClose />
+          </button>
+        </div>
 
-      <hr />
-      <div className="row mt-2 product-details">
-        <div className="image-container">
-          <div className="main-image-container">
-            <img
-              className="img-fluid main-image"
-              src={productImages[selectedImage]}
-              alt="product"
-            />
-          </div>
-          {/* Image Slider */}
-          <div className="image-slider">
-            <div className="slider-container">
-              {productImages.map((image, index) => (
-                <div
-                  key={index}
-                  className={`slider-thumbnail ${
-                    index === selectedImage ? "active" : ""
-                  }`}
-                  onClick={() => handleIMageClick(index)}
-                >
+        <div className="modalBody">
+          <div className="row">
+            <div className="col-md-6">
+              <div className="productImages">
+                <div className="mainImage">
                   <img
-                    src={image}
-                    alt={`product-${index + 1}`}
-                    className="thumbnail-image"
+                    src={images[selectedImage] || altImg}
+                    alt={productDetails?.title || "Product"}
+                    onError={(e) => {
+                      e.target.src = altImg;
+                    }}
                   />
                 </div>
-              ))}
+                {images.length > 1 && (
+                  <div className="thumbnailImages">
+                    {images.map((image, index) => (
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`Product ${index + 1}`}
+                        className={selectedImage === index ? "active" : ""}
+                        onClick={() => setSelectedImage(index)}
+                        onError={(e) => {
+                          e.target.src = altImg;
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div className="productInfo">
+                <h2>{productDetails?.title || "Product Title"}</h2>
+
+                {productDetails?.seller_name && (
+                  <p className="seller-info">
+                    <strong>Sold by:</strong> {productDetails.seller_name}
+                    {productDetails?.seller_rating > 0 && (
+                      <span className="seller-rating">
+                        ⭐ {productDetails.seller_rating.toFixed(1)}
+                      </span>
+                    )}
+                  </p>
+                )}
+
+                <div className="product-rating">
+                  <span className="rating-value">
+                    {productDetails?.rating?.toFixed(1) || "0.0"}
+                  </span>
+                  <span className="rating-count">
+                    ({productDetails?.reviews || 0} reviews)
+                  </span>
+                </div>
+
+                <div className="price">
+                  {productDetails?.initialPrice > 0 &&
+                    productDetails?.initialPrice !==
+                      productDetails?.finalPrice && (
+                      <span className="oldPrice">
+                        {formatPrice(
+                          productDetails?.initialPrice,
+                          productDetails?.currency
+                        )}
+                      </span>
+                    )}
+                  <span className="currentPrice">
+                    {formatPrice(
+                      productDetails?.finalPrice,
+                      productDetails?.currency
+                    )}
+                  </span>
+                  {calculateDiscount() > 0 && (
+                    <span className="discount">{calculateDiscount()}% OFF</span>
+                  )}
+                </div>
+
+                <div className="stock">
+                  <span
+                    className={
+                      productDetails?.stock > 0 ? "in-stock" : "out-of-stock"
+                    }
+                  >
+                    {productDetails?.stock > 0 ? "In Stock" : "Out of Stock"}
+                  </span>
+                  {productDetails?.stock > 0 && (
+                    <span className="stock-count">
+                      {productDetails.stock} available
+                    </span>
+                  )}
+                </div>
+
+                {productDetails?.description && (
+                  <div className="description">
+                    <h4>Description</h4>
+                    <p>{productDetails.product_description}</p>
+                  </div>
+                )}
+
+                <div className="quantity">
+                  <label>Quantity:</label>
+                  <QuantityBox />
+                </div>
+
+                <div className="actions">
+                  <button className="addToCartBtn">Add to Cart</button>
+                  <button
+                    className="favorieBtn"
+                    onClick={() => setIsFavorite(!isFavorite)}
+                  >
+                    {isFavorite ? <IoMdHeart /> : <IoMdHeartEmpty />}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div className="product-details-container">
-          <div className="d-flex price align-items-center">
-            <span className="oldPrice lg mr-2">9.5</span>
-            <span className="netPrice lg text-danger">9.5</span>
-          </div>
-          <span className="badge bg-sucess">IN STOCK</span>
-          <p className="productDescription mt-3">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book.
-          </p>
-          <div className="d-flex align-items-center">
-            <QuantityBox />
-            <Button className="add-to-cart-button">Add to Cart</Button>
-          </div>
-          <div className="add-wishlist-button mt-3">
-            <Button className="add-wishlist-button-btn">
-              <CiHeart /> Add to Wishlist
-            </Button>
-          </div>
-        </div>
       </div>
-    </Dialog>
+    </div>
   );
 };
 export default ProductModal;

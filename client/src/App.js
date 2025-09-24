@@ -3,11 +3,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Router, Route, Routes } from "react-router-dom";
 import Header from "./Components/Header/header";
 import Footer from "./Components/Footer/footer";
+import ProductModal from "./Components/ProductModal/productModal.js";
 
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import Cart from "./Pages/Cart/cart.js";
+import Product from "./Pages/Product/product.js";
 
 import axios from "axios";
 import { useState, useEffect, createContext } from "react";
@@ -65,6 +67,7 @@ function App() {
           <Route exact={true} path="/login" element={<Login />} />
           <Route exact={true} path="/signup" element={<Signup />} />
           <Route exact={true} path="/cart" element={<Cart />} />
+          <Route exact={true} path="/products/:id" element={<Product />} />
         </Routes>
         <Footer />
       </MyContext.Provider>

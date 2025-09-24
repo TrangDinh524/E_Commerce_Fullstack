@@ -6,9 +6,8 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { CiApple } from "react-icons/ci";
 import { TbRosetteDiscountOff, TbTruckDelivery } from "react-icons/tb";
 import { IoMailOutline } from "react-icons/io5";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 // import required modules
@@ -17,8 +16,38 @@ import discount_banner from "../../assets/images/discount_banner.jpg";
 import discount_banner_2 from "../../assets/images/discount_banner_2.jpg";
 import newsletterImg from "../../assets/images/coupon.png";
 import { BiSupport } from "react-icons/bi";
+import { GetProducts } from "../../services/productsService";
 
 const Home = () => {
+  const [loading, setLoading] = useState(true);
+  const [bestSellerProducts, setBestSellerProducts] = useState([]);
+  const [newProducts, setNewProducts] = useState([]);
+  const [error, setError] = useState({});
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+
+      const bestSellerResponse = await GetProducts({
+        limit: 8,
+      });
+      const newProductsResponse = await GetProducts({
+        limit: 7,
+      });
+
+      setBestSellerProducts(bestSellerResponse.products, []);
+      setNewProducts(newProductsResponse.products, []);
+    } catch (err) {
+      setError(err.message);
+      console.error("Error fetching products: ", err);
+    } finally {
+      setLoading(false);
+    }
+  };
   var productSLiderOptions = {
     dots: false,
     infinite: false,
@@ -40,12 +69,14 @@ const Home = () => {
                   <img
                     src="https://api.spicezgold.com/download/file_1734525757507_NewProject(34).jpg"
                     className="cursor w-100"
+                    alt="Banner_1"
                   ></img>
                 </div>
                 <div className="banner mt-4">
                   <img
                     src="https://api.spicezgold.com/download/file_1734525767798_NewProject(35).jpg"
                     className="cursor w-100"
+                    alt="Banner_2"
                   ></img>
                 </div>
               </div>
@@ -74,24 +105,11 @@ const Home = () => {
                   modules={[Navigation]}
                   className="mySwiper"
                 >
-                  <SwiperSlide>
-                    <ProductItem />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <ProductItem />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <ProductItem />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <ProductItem />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <ProductItem />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <ProductItem />
-                  </SwiperSlide>
+                  {bestSellerProducts.map((product) => (
+                    <SwiperSlide key={product.id}>
+                      <ProductItem product={product} />
+                    </SwiperSlide>
+                  ))}
                 </Swiper>
               </div>
 
@@ -109,40 +127,12 @@ const Home = () => {
               </div>
 
               <div className="bestSellerProduct productRow2 w-100 mt-4 d-flex">
-                {/* <Swiper
-                  slidesPerView={4}
-                  spaceBetween={10}
-                  Navigation={true}
-                  slidesPerGroup={3}
-                  modules={[Navigation]}
-                  className="mySwiper"
-                >
-                  <SwiperSlide>
-                    <ProductItem />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <ProductItem />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <ProductItem />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <ProductItem />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <ProductItem />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <ProductItem />
-                  </SwiperSlide>
-                </Swiper> */}
-                <ProductItem />
-                <ProductItem />
-                <ProductItem />
-                <ProductItem />
-                <ProductItem />
-                <ProductItem />
-                <ProductItem />
+                {newProducts.map((product) => (
+                  <ProductItem
+                    // key={product.id}
+                    product={product}
+                  />
+                ))}
               </div>
 
               <div className="d-flex mt-4 mb-5 bannerSec">

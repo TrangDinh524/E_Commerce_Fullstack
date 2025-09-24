@@ -5,14 +5,16 @@ import re
 import hashlib
 from datetime import datetime
 
-def clean_text(text):
-    if pd.isna(text) or text == '' or text is None or str(text).lower() == 'nan':
+def clean_text(text, is_json=False):
+    print("text", text)
+    if pd.isna(text) or text == '' or text is None or str(text).lower() == 'nan' or str(text).lower() == 'null':
         return ''
     text = str(text)
     text = text.replace('\n', '')
     text = text.replace('\r', '')
-    text = text.replace('"', '""')
-    text = re.sub(r'\s+', ' ', text) 
+    text = re.sub(r'\s+', ' ', text)
+    if not is_json:
+        text = text.replace('"', '""')
     return text.strip()
 
 def safe_int(value, default=0):
@@ -126,18 +128,18 @@ def process_products_data(input_file, output_dir):
                 'final_price': safe_float(row.get('final_price', 0.0)),
                 'currency': clean_text(row.get('currency', None)),
                 'stock': safe_int(row.get('stock', 0)),
-                'image': clean_text(row.get('image', None)),
-                'video': clean_text(row.get('video', None)),
-                'breadcrumb': clean_text(row.get('breadcrumb', None)),
-                'product_specifications': clean_text(row.get('Product Specifications', None)),  # Fixed column name
+                'image': clean_text(row.get('image', None), is_json=True),
+                'video': clean_text(row.get('video', None), is_json=True),
+                'breadcrumb': clean_text(row.get('breadcrumb', None), is_json=True),
+                'product_specifications': clean_text(row.get('Product Specifications', None), is_json=True),  # Fixed column name
                 'product_description': clean_text(row.get('Product Description', None)),  # Fixed column name
                 'category_id': safe_int(row.get('category_id', 0)),
                 'flash_sale': safe_int(row.get('flash_sale', 0)),
                 'flash_sale_time': clean_text(row.get('flash_sale_time', None)),
-                'product_variation': clean_text(row.get('product_variation', None)),
+                'product_variation': clean_text(row.get('product_variation', None), is_json=True),
                 'gmv_cal': safe_float(row.get('gmv_cal', 0.0)),
                 'category_url': clean_text(row.get('category_url', None)),
-                'vouchers': clean_text(row.get('vouchers', None)),
+                'vouchers': clean_text(row.get('vouchers', None), is_json=True),
                 'is_available': safe_int(row.get('is_available', 0)),
                 'product_ratings': safe_float(row.get('product_ratings', 0.0)),
                 'seller_id': seller_id,
