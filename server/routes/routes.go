@@ -14,4 +14,13 @@ func SetupRoutes(router *gin.Engine) {
 		auth.POST("/signup", handlers.Signup)
 		auth.POST("/login", handlers.Login)
 	}
+	products := router.Group("/products")
+	{
+		products.GET("", handlers.GetProducts)
+		products.GET("/:id", handlers.GetProductByID)
+	}
+	sellers := router.Group("/sellers")
+	{
+		sellers.GET("/:id", handlers.GetSellerByID)
+	}
 }

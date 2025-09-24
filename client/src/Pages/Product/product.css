@@ -1,0 +1,291 @@
+.product-page {
+  min-height: 80vh;
+}
+
+/* Product Media Styles */
+.product-media {
+  position: sticky;
+  top: 20px;
+}
+
+.main-media {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.main-media img,
+.main-media video {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+.media-thumbnails {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.media-thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.media-thumbnail:hover,
+.media-thumbnail.active {
+  border-color: #007bff;
+  transform: scale(1.05);
+}
+
+.video-thumbnail {
+  position: relative;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumbnail-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 24px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+
+.image-thumbnail {
+  background-color: #f8f9fa;
+}
+
+.product-images {
+  position: sticky;
+  top: 20px;
+}
+
+.main-image {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.main-image img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+}
+
+.thumbnail-images {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.thumbnail:hover,
+.thumbnail.active {
+  border-color: #007bff;
+}
+
+.product-info {
+  padding-left: 2rem;
+}
+
+.product-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.seller-info {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+}
+
+.seller-rating {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+}
+
+.price-section {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.old-price {
+  font-size: 1.2rem;
+  color: #6c757d;
+  text-decoration: line-through;
+  margin-bottom: 0.5rem;
+}
+
+.current-price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #dc3545;
+  margin-bottom: 0.5rem;
+}
+
+.discount-badge {
+  display: inline-block;
+  background-color: #dc3545;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.stock-info {
+  display: flex;
+  align-items: center;
+}
+
+.stock-status {
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+}
+
+.stock-status.in-stock {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.stock-status.out-of-stock {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.stock-count {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.description {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.description h4 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.description p {
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.quantity-section {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.quantity-section .form-label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.actions .MuiButton-root {
+  min-width: 150px;
+}
+
+@media (max-width: 768px) {
+  .product-info {
+    padding-left: 0;
+    margin-top: 2rem;
+  }
+
+  .product-title {
+    font-size: 1.5rem;
+  }
+
+  .current-price {
+    font-size: 1.5rem;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions .MuiButton-root {
+    width: 100%;
+  }
+
+  .product-media {
+    position: static;
+  }
+
+  .main-media img,
+  .main-media video {
+    height: 300px;
+  }
+
+  .media-thumbnails {
+    justify-content: center;
+  }
+
+  .media-thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+
+  .play-icon {
+    font-size: 18px;
+  }
+}
