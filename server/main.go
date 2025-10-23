@@ -4,10 +4,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"server/database"
 	"server/routes"
+
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {

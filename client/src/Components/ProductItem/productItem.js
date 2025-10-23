@@ -1,15 +1,17 @@
 import Rating from "@mui/material/Rating";
-import { TfiFullscreen } from "react-icons/tfi";
-import { IoMdHeartEmpty } from "react-icons/io";
+import { TfiFullscreen, TfiShoppingCart } from "react-icons/tfi";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import ProductModal from "../ProductModal/productModal";
+import { addToCart } from "c:/Users/dinht/Documents/Ecommerce Project/client/src/services/cartService";
 
 const ProductItem = ({ product }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [addingToCart, setAddingToCart] = useState(false);
   const navigate = useNavigate();
   const altImage = "https://via.placeholder.com/300x300?text=No+Image";
+
   const viewProductDetail = (id) => {
     setIsModalOpen(true);
   };
@@ -26,7 +28,6 @@ const ProductItem = ({ product }) => {
 
   // Get first image from image array
   const getFirstImage = (imageData) => {
-    console.log("imageData received", imageData);
     if (!imageData) return altImage;
 
     try {
@@ -42,6 +43,22 @@ const ProductItem = ({ product }) => {
       return;
     }
     navigate(`/products/${product?.id}`);
+  };
+
+  const handleAddToCart = async (e) => {
+    e.stopPropagation();
+    if (!product?.id) return;
+
+    try {
+      setAddingToCart(true);
+      await addToCart(product.id, 1);
+      // toast
+    } catch (error) {
+      console.error("Error adding to Cart: ", error);
+      // toast
+    } finally {
+      setAddingToCart(false);
+    }
   };
 
   return (
@@ -75,8 +92,18 @@ const ProductItem = ({ product }) => {
             >
               <TfiFullscreen />
             </Button>
-            <Button onClick={(e) => e.stopPropagation()}>
-              <IoMdHeartEmpty style={{ fontSize: "20px" }} />
+            <Button
+              onClick={handleAddToCart}
+              disabled={addingToCart || product?.stock === 0}
+              color="primary"
+            >
+              {addingToCart ? (
+                <div className="spinner-border spinner-border-sm" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              ) : (
+                <TfiShoppingCart />
+              )}
             </Button>
           </div>
         </div>
@@ -110,13 +137,13 @@ const ProductItem = ({ product }) => {
               {formatPrice(product.final_price, product.currency)}
             </span>
           </div>
-          {product?.seller_name && (
+          {/* {product?.seller_name && (
             <div className="seller-info mt-2">
               <small className="text-muted">
                 Sold by: {product.seller_name}
               </small>
             </div>
-          )}
+          )} */}
         </div>
       </div>
 
