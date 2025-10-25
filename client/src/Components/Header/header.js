@@ -8,10 +8,12 @@ import Button from "@mui/material/Button";
 import { IoIosMenu } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 import Navigation from "./Navigation/navigation.js";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { MyContext } from "../../App";
+import { getCartCount } from "../../services/cartService";
 
 const Header = () => {
+  const [cartCount, setCartCount] = useState(0);
   const context = useContext(MyContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,6 +25,18 @@ const Header = () => {
     context.logout();
     navigate("/");
   };
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      try {
+        const response = await getCartCount();
+        setCartCount(response.count);
+      } catch (error) {
+        console.error("Error fetching cart count:", error);
+      }
+    };
+    fetchCartCount();
+  }, []);
 
   return (
     <>
@@ -59,16 +73,18 @@ const Header = () => {
                         <Button className="user-icon mr-3" title="My Account">
                           <FiUser />
                         </Button>
-                        <div className="cart d-flex align-items-center">
+                        <div
+                          className="cart d-flex align-items-center"
+                          onClick={() => navigate("/cart")}
+                        >
                           <div className="position-relative ml-2">
                             <Button className="user-icon">
                               <IoBagOutline />
                             </Button>
                             <span className="count d-flex align-items-center justify-content-center">
-                              1
+                              {cartCount}
                             </span>
                           </div>
-                          <span className="price">$3.29</span>
                         </div>
                         <Button
                           onClick={handleLogout}

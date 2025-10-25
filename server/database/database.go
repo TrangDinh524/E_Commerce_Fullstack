@@ -145,7 +145,26 @@ func createTables() error {
 	)`
 	_, err= DB.Exec(createProductsTable)
 	if err != nil {
-		fmt.Errorf("failed to create products table: %w", err)
+		return fmt.Errorf("failed to create products table: %w", err)
+	}
+
+	createCartTable := `
+	CREATE TABLE IF NOT EXISTS carts (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	user_id INT NOT NULL,
+	product_id VARCHAR(50) NOT NULL,
+	quantity INT NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+	FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+	UNIQUE KEY unique_user_product (user_id, product_id)
+	)
+	`
+
+	_, err = DB.Exec(createCartTable)
+	if err != nil {
+		return fmt.Errorf("failed to create carts table: %w", err)
 	}
 
 	log.Println("Database tables created successfully")

@@ -23,4 +23,11 @@ func SetupRoutes(router *gin.Engine) {
 	{
 		sellers.GET("/:id", handlers.GetSellerByID)
 	}
+	// Protected routes (require authentication)
+	cart := router.Group("/cart")
+	{
+		cart.POST("/add", handlers.AddToCart)
+		cart.GET("", handlers.GetCart)
+		cart.GET("/count", handlers.GetCartCount)
+	}
 }

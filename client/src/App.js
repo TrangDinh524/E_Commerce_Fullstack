@@ -10,7 +10,7 @@ import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import Cart from "./Pages/Cart/cart.js";
 import Product from "./Pages/Product/product.js";
-
+import Checkout from "./Pages/Checkout/checkout.js";
 import axios from "axios";
 import { useState, useEffect, createContext } from "react";
 export const MyContext = createContext();
@@ -67,6 +67,7 @@ function App() {
           <Route exact={true} path="/login" element={<Login />} />
           <Route exact={true} path="/signup" element={<Signup />} />
           <Route exact={true} path="/cart" element={<Cart />} />
+          <Route exact={true} path="/checkout" element={<Checkout />} />
           <Route exact={true} path="/products/:id" element={<Product />} />
         </Routes>
         <Footer />
